@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, Button, Text, ActivityIndicator } from 'react-native-paper';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseAuth } from '../firebaseConfig';
+import { StatusBar } from 'expo-status-bar';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -27,6 +28,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style='dark'/>
       <Image source={require("../assets/diafit.png")} />
       <Text style={styles.title}>DiaFit</Text>
       <TextInput
@@ -44,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
       />
       {loading ? <ActivityIndicator size="small" color='#177AD5' /> :
         <>
-          <Button mode="contained" color='#177AD5' onPress={handleLogin} style={styles.button}>
+          <Button mode="contained" buttonColor='#177AD5' color='#177AD5' onPress={handleLogin} style={styles.button}>
             Login
           </Button>
           <TouchableOpacity onPress={() => navigation.replace("signup")}>

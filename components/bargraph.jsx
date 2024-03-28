@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from "react-native-gifted-charts";
 
 export default function Bargraph() {
+    const [user, setUser] = useState(null);
+
     const data = [
-        { value: 39, label: 'Gl'},
-        { value: 52, label: 'Cal'},
-        { value: 0.3, label: 'Prot'},
-        { value: 14, label: 'CHO'},
-        { value: 0.2, label: 'F'},
-        { value: 8.5, label: 'Other'}
+        { value: 39, label: 'Gl' },
+        { value: 52, label: 'Cal' },
+        { value: 0.3, label: 'Prot' },
+        { value: 14, label: 'CHO' },
+        { value: 0.2, label: 'F' },
+        { value: 8.5, label: 'Other' }
     ];
 
     return (
@@ -18,7 +20,7 @@ export default function Bargraph() {
                 <BarChart
                     data={data}
                     barColor="#1e293b"
-                    frontColor= '#177AD5'
+                    frontColor='#177AD5'
                     barSpacing={18}
                     barStyle={{ borderRadius: 8 }}
                     yAxisLabel=""

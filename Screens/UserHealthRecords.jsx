@@ -5,6 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { collection, addDoc, setDoc, doc } from 'firebase/firestore';
 import { firebaseAuth, firestoredb } from '../firebaseConfig'; // Import Firebase Auth module and Firestore
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { StatusBar } from 'expo-status-bar';
 
 export default function UserHealthRecords({ navigation }) {
     const [selectedValue, setSelectedValue] = useState(null);
@@ -63,6 +64,7 @@ export default function UserHealthRecords({ navigation }) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <StatusBar style='dark' />
             <TextInput
                 label="Age (Years)"
                 keyboardType="numeric"

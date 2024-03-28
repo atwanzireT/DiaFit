@@ -73,6 +73,7 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style='dark' />
       <Image source={require("../assets/diafit.png")} />
       <Text style={styles.title}>DiaFit</Text>
       <TextInput
@@ -103,7 +104,7 @@ const SignUpScreen = ({ navigation }) => {
         secureTextEntry
         style={styles.input}
       />
-      {loading ? <ActivityIndicator size="small" color='#177AD5'/> :
+      {loading ? <ActivityIndicator size="small" color='#177AD5' /> :
         <>
           <Button mode="contained" buttonColor='#177AD5' onPress={handleSignUp} style={styles.button}>
             Sign Up
