@@ -7,6 +7,7 @@ import DashBoard from './DashBoard';
 import SettingScreen from './SettingScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddFoodRecord from './AddFoodRecords';
+import RecommendationScreen from './RecommendationScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,19 +21,27 @@ export default function MainScreen() {
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }} />
-        <Tab.Screen name="Add Food" component={AddFoodRecord}
+      <Tab.Screen name="Recommender" component={RecommendationScreen}
+        options={{
+          title: "Recommender",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="plus" color={color} size={size} />
+          ),
+        }} />
+      <Tab.Screen name="Add Food" component={AddFoodRecord}
         options={{
           title: "Add Food",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="plus" color={color} size={size} />
           ),
         }} />
-      <Tab.Screen name="settings" component={SettingScreen} 
-      options={{ 
-        title: "Settings",
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="cog" color={color} size={size} />
-        ), }} />
+      <Tab.Screen name="settings" component={SettingScreen}
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="cog" color={color} size={size} />
+          ),
+        }} />
     </Tab.Navigator>
   );
 }

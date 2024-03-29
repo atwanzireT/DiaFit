@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -6,8 +6,9 @@ import { firestoredb } from '../firebaseConfig'; // Import your Firebase Firesto
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Bargraph from "../components/bargraph";
 import MedicalReminder from "../components/medicationReminder";
+import { StatusBar } from "expo-status-bar";
 
-export default function DashBoard() {
+export default function DashBoard({navigation}) {
     const [weight, setWeight] = useState("");
     const [bloodPressure, setBloodPressure] = useState("");
     const [millimoter, setMillimoter] = useState("");
@@ -40,40 +41,43 @@ export default function DashBoard() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Health Metrics</Text>
-            <View style={styles.cardContainer}>
-                <Card style={[styles.card, { backgroundColor: "#155e75" }]}>
-                    <View style={styles.cardContent}>
-                        <Text style={styles.cardText}>Weight</Text>
-                        <Text style={styles.cardText}>{weight}</Text>
-                    </View>
-                </Card>
-                <Card style={[styles.card, { backgroundColor: "#3730a3" }]}>
-                    <View style={styles.cardContent}>
-                        <Text style={styles.cardText}>Blood Pressure</Text>
-                        <Text style={styles.cardText}>{bloodPressure} mm/Hg</Text>
-                    </View>
-                </Card>
-                <Card style={[styles.card, { backgroundColor: "#083344" }]}>
-                    <View style={styles.cardContent}>
-                        <Text style={styles.cardText}>Millimoter per Liter</Text>
-                        <Text style={styles.cardText}>{millimoter}  mmol/L</Text>
-                    </View>
-                </Card>
-                <Card style={[styles.card, { backgroundColor: "#2563eb" }]}>
-                    <View style={styles.cardContent}>
-                        <Text style={styles.cardText}>Glycated Hemoglobin</Text>
-                        <Text style={styles.cardText}>{glycated} %</Text>
-                    </View>
-                </Card>
-            </View>
-            <View>
-                <Text style={styles.title}>Nutrition Summary</Text>
-                <Bargraph/>
-            </View>
-            <View>
-                <Text style={styles.title}>Medication Schedule</Text>
-                <MedicalReminder/>
+            <View style={{ marginBottom: 10 }}>
+                <StatusBar style ="dark"/>
+                <Text style={styles.title}>Health Metrics</Text>
+                <View style={styles.cardContainer}>
+                    <Card style={[styles.card, { backgroundColor: "#155e75" }]}>
+                        <View style={styles.cardContent}>
+                            <Text style={styles.cardText}>Weight</Text>
+                            <Text style={styles.cardText}>{weight}</Text>
+                        </View>
+                    </Card>
+                    <Card style={[styles.card, { backgroundColor: "#3730a3" }]}>
+                        <View style={styles.cardContent}>
+                            <Text style={styles.cardText}>Blood Pressure</Text>
+                            <Text style={styles.cardText}>{bloodPressure} mm/Hg</Text>
+                        </View>
+                    </Card>
+                    <Card style={[styles.card, { backgroundColor: "#083344" }]}>
+                        <View style={styles.cardContent}>
+                            <Text style={styles.cardText}>Millimoter per Liter</Text>
+                            <Text style={styles.cardText}>{millimoter}  mmol/L</Text>
+                        </View>
+                    </Card>
+                    <Card style={[styles.card, { backgroundColor: "#2563eb" }]}>
+                        <View style={styles.cardContent}>
+                            <Text style={styles.cardText}>Glycated Hemoglobin</Text>
+                            <Text style={styles.cardText}>{glycated} %</Text>
+                        </View>
+                    </Card>
+                </View>
+                <View>
+                    <Text style={styles.title}>Nutrition Summary</Text>
+                    <Bargraph />
+                </View>
+                <View>
+                    <Text style={styles.title}>Medication Schedule</Text>
+                    <MedicalReminder />
+                </View>
             </View>
         </ScrollView>
     );
