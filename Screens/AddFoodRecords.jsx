@@ -7,8 +7,9 @@ import { firestoredb } from '../firebaseConfig';
 
 export default function AddFoodRecord() {
     const [foodName, setFoodName] = useState("");
+    const [imageUri, setImageUri] = useState("");
     const [formData, setFormData] = useState({
-        Glycemic_Index: '',
+        Glycemic_Index: null,
         Calories: '',
         Carbohydrates: '',
         Protein: '',
@@ -22,13 +23,14 @@ export default function AddFoodRecord() {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('https://a43a-41-75-190-70.ngrok-free.app/predict/', formData);
+            const response = await axios.post('https://8a91-41-75-180-124.ngrok-free.app/predict/', formData);
             if (response.data.prediction == 1) {
                 Alert.alert('Classification', `The ${foodName} is good for a diabetic patient.`);
                 // Add the food record to Firestore
                 let foodRecord = {
                     foodName: foodName,
-                    Glycemic_Index: formData.Glycemic_Index,
+                    imageUri: imageUri,
+                    Glycemic_Index: parseInt(formData.Glycemic_Index),
                     Calories: formData.Calories,
                     Carbohydrates: formData.Carbohydrates,
                     Protein: formData.Protein,
@@ -60,7 +62,8 @@ export default function AddFoodRecord() {
             <View style={{ marginBottom: 30 }}>
                 <Text style={styles.title}>Record Food Item</Text>
                 <TextInput label="Food Name" style={styles.input} value={foodName} onChangeText={(text) => setFoodName(text)} />
-                <TextInput label="Glycemic Index" style={styles.input} value={formData.Glycemic_Index} onChangeText={(text) => handleInputChange('Glycemic_Index', text)} />
+                <TextInput label="Image Uri" style={styles.input} value={imageUri} onChangeText={(text) => setImageUri(text)} />
+                <TextInput label="Glycemic Index" keyboardType='numeric' style={styles.input} value={formData.Glycemic_Index} onChangeText={(text) => handleInputChange('Glycemic_Index', text)} />
                 <TextInput label="Calories" style={styles.input} value={formData.Calories} onChangeText={(text) => handleInputChange('Calories', text)} />
                 <TextInput label="Carbohydrates" style={styles.input} value={formData.Carbohydrates} onChangeText={(text) => handleInputChange('Carbohydrates', text)} />
                 <TextInput label="Protein" style={styles.input} value={formData.Protein} onChangeText={(text) => handleInputChange('Protein', text)} />

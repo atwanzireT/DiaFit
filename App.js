@@ -14,7 +14,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="recommender" component={RecommendationScreen} options={{ headerShown: true, title:"Recommender" }} />
+        {/* <Stack.Screen name="recommender" component={RecommendationScreen} options={{ headerShown: true, title:"Recommender" }} /> */}
         <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="signup" component={SignUpScreen} options={{ headerShown: false }} />
         <Stack.Screen name="records" component={UserHealthRecords} options={{ title: "Health Records" }} />

@@ -25,7 +25,7 @@ export default function MainScreen() {
         options={{
           title: "Recommender",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="plus" color={color} size={size} />
+            <MaterialCommunityIcons name="ballot" color={color} size={size} />
           ),
         }} />
       <Tab.Screen name="Add Food" component={AddFoodRecord}

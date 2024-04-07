@@ -13,6 +13,7 @@ export default function DashBoard({navigation}) {
     const [bloodPressure, setBloodPressure] = useState("");
     const [millimoter, setMillimoter] = useState("");
     const [glycated, setGlycated] = useState("");
+    const [age, setAge] = useState("");
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -28,6 +29,7 @@ export default function DashBoard({navigation}) {
                         setBloodPressure(data.bloodPressure || "");
                         setMillimoter(data.mgdcl || "");
                         setGlycated(data.glycatedHemoglobin || "");
+                        setAge(data.age || "");
                     } else {
                         console.log("No such document!");
                     }
@@ -65,8 +67,8 @@ export default function DashBoard({navigation}) {
                     </Card>
                     <Card style={[styles.card, { backgroundColor: "#2563eb" }]}>
                         <View style={styles.cardContent}>
-                            <Text style={styles.cardText}>Glycated Hemoglobin</Text>
-                            <Text style={styles.cardText}>{glycated} %</Text>
+                            <Text style={styles.cardText}>Age</Text>
+                            <Text style={styles.cardText}>{age} years</Text>
                         </View>
                     </Card>
                 </View>
