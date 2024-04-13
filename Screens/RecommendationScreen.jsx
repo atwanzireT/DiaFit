@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, ScrollView, StyleSheet, FlatList } from "react-native";
-import { Card, Text, TextInput, Button } from "react-native-paper";
+import { Card, Text, TextInput, Button, ActivityIndicator } from "react-native-paper";
 import customstyles from "../values/styles";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { firestoredb } from "../firebaseConfig";
@@ -13,6 +13,8 @@ export default function RecommendationScreen() {
     const [user, setUser] = useState(null);
     const [recommendedFoods, setRecommendedFoods] = useState([]);
     const [data, setData] = useState([]);
+    const [noItem, setNoItem] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     console.log("Value: ", glucose);
     console.log("Data: ", data);
@@ -24,12 +26,12 @@ export default function RecommendationScreen() {
         await setDoc(doc(firestoredb, "userDiet", user.uid), {
             user: user.uid,
             foodname: foodname,
-            glycemic_Index:Glycemic_Index,
+            glycemic_Index: Glycemic_Index,
             calcium: Calcium_Content,
-            fat:Fat,
+            fat: Fat,
             carbohydrates: Carbohydrates,
-            protein:Protein
-        }).then(() =>{
+            protein: Protein
+        }).then(() => {
             console.log("Item added!")
         })
     }
@@ -39,22 +41,42 @@ export default function RecommendationScreen() {
             setUser(user);
         });
 
-        if (glucose !== "") {
-            let recommended = [];
-            const glucoseValue = parseFloat(glucose);
+        try {
+            if (glucose !== "") {
+                let recommended = [];
+                const glucoseValue = parseFloat(glucose);
 
-            if (glucoseValue >= 10) {
-                // Recommend foods with glycemic index of 0-55
-                recommended = data.filter(item => parseInt(item.Glycemic_Index) <= 55);
-            } else if (glucoseValue >= 3.9 && glucoseValue < 10) {
-                // Recommend foods with glycemic index of 55-69
-                recommended = data.filter(item => parseInt(item.Glycemic_Index) > 55 && parseInt(item.Glycemic_Index) <= 69);
-            } else if (glucoseValue < 3.9) {
-                // Recommend foods with glycemic index above 70
-                recommended = data.filter(item => parseInt(item.Glycemic_Index) > 70);
+                if (glucoseValue < 0 || glucoseValue > 16) {
+                    setNoItem(true);
+                    setLoading(false)
+
+                } else if (glucoseValue >= 9) {
+                    // Recommend foods with glycemic index of 0-55
+                    setNoItem(false);
+                    recommended = data.filter(item => parseInt(item.Glycemic_Index) <= 55);
+                    setLoading(false)
+
+                } else if (glucoseValue >= 3.9 && glucoseValue < 10) {
+                    // Recommend foods with glycemic index of 55-69
+                    setNoItem(false);
+                    recommended = data.filter(item => parseInt(item.Glycemic_Index) > 55 && parseInt(item.Glycemic_Index) <= 69);
+                    setLoading(false)
+
+                } else if (glucoseValue < 3.9) {
+                    // Recommend foods with glycemic index above 70
+                    setNoItem(false);
+                    recommended = data.filter(item => parseInt(item.Glycemic_Index) > 70);
+                    setLoading(false)
+
+                }
+
+                setRecommendedFoods(recommended);
+            } else {
+                setLoading(true)
             }
-
-            setRecommendedFoods(recommended);
+        } catch (error) {
+            console.log("Failed to Recommend: ", error);
+            setLoading(false)
         }
         return () => unsubscribeAuth();
     }, [glucose]);
@@ -84,24 +106,31 @@ export default function RecommendationScreen() {
                 style={styles.textInput}
                 keyboardType="numeric"
             />
-            <ScrollView contentContainerStyle={styles.scrollView}>
-                <View style={[customstyles.grid, customstyles.space_between, customstyles.wrap]}>
-                    {recommendedFoods.map((item, index) => (
-                        <Card key={index} style={styles.card}>
-                            <Card.Cover source={{ uri: item.imageUri }} />
-                            <Card.Content style={styles.cardContent}>
-                                <Text style={styles.title}>{item.foodName}</Text>
-                                <Text style={styles.valueText}>{item.Glycemic_Index} Glycemic Index</Text>
-                            </Card.Content>
-                            <Card.Actions style={styles.cardContent}>
-                                <TouchableOpacity onPress={() => foodchoice(item.foodName, item.Glycemic_Index, item.Calcium_Content, item.Fat, item.Carbohydrates, item.Protein)}>
-                                    <Button mode="contained" buttonColor='#177AD5'>SELECT</Button>
-                                </TouchableOpacity>
-                            </Card.Actions>
-                        </Card>
-                    ))}
-                </View>
-            </ScrollView>
+            {loading ?
+                <ActivityIndicator size="small" /> :
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    {noItem ?
+                        <Text>Glocuse out of Range</Text>
+                        :
+                        <View style={[customstyles.grid, customstyles.space_between, customstyles.wrap]}>
+                            {recommendedFoods.map((item, index) => (
+                                <Card key={index} style={styles.card}>
+                                    <Card.Cover source={{ uri: item.imageUri }} />
+                                    <Card.Content style={styles.cardContent}>
+                                        <Text style={styles.title}>{item.foodName}</Text>
+                                        <Text style={styles.valueText}>{item.Glycemic_Index} Glycemic Index</Text>
+                                    </Card.Content>
+                                    <Card.Actions style={styles.cardContent}>
+                                        <TouchableOpacity onPress={() => foodchoice(item.foodName, item.Glycemic_Index, item.Calcium_Content, item.Fat, item.Carbohydrates, item.Protein)}>
+                                            <Button mode="contained" buttonColor='#177AD5'>SELECT</Button>
+                                        </TouchableOpacity>
+                                    </Card.Actions>
+                                </Card>
+                            ))}
+                        </View>
+                    }
+                </ScrollView>
+            }
         </View>
     );
 }

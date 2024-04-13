@@ -4,7 +4,8 @@ import { TextInput, Button, Text, ActivityIndicator } from 'react-native-paper';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { collection, doc, setDoc } from 'firebase/firestore'; // Import Firestore modules
 import RNPickerSelect from 'react-native-picker-select';
-import { firebaseAuth, firestore } from '../firebaseConfig'; // Assuming you have already initialized Firestore
+import { firebaseAuth, firestoredb } from '../firebaseConfig';
+import { StatusBar } from 'expo-status-bar';
 
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -34,7 +35,7 @@ const SignUpScreen = ({ navigation }) => {
           displayName: username,
         }).then(() => {
           console.log('User profile updated with display name:', username);
-          signInWithEmailAndPassword(firebseAuth, email, password)
+          signInWithEmailAndPassword(firebaseAuth, email, password)
             .then(() => {
               console.log("Logged in. ")
               navigation.replace("records");
