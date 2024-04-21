@@ -10,7 +10,6 @@ import { StatusBar } from 'expo-status-bar';
 export default function UserHealthRecords({ navigation }) {
     const [selectedValue, setSelectedValue] = useState(null);
     const [age, setAge] = useState('');
-    const [mgdcl, setMgdcl] = useState('');
     const [weight, setWeight] = useState('');
     const [hemoglobin, setHemoglobin] = useState('');
     const [bloodPressure, setBloodPressure] = useState('');
@@ -20,11 +19,6 @@ export default function UserHealthRecords({ navigation }) {
         label: 'Select Diabetic type...',
         value: null,
     };
-
-    const options = [
-        { label: 'type1', value: 'Type 1' },
-        { label: 'type2', value: 'Type 2' },
-    ];
 
     useEffect(() => {
         const auth = getAuth();
@@ -39,11 +33,9 @@ export default function UserHealthRecords({ navigation }) {
             if (user) {
                 const data = {
                     age: parseInt(age),
-                    mgdcl: parseInt(mgdcl),
                     weight: parseInt(weight),
                     glycatedHemoglobin: parseInt(hemoglobin),
                     bloodPressure,
-                    diabeticType: selectedValue,
                 };
 
                 const docRef = doc(firestoredb, 'userHealthRecords', user.uid);
@@ -75,15 +67,6 @@ export default function UserHealthRecords({ navigation }) {
             />
 
             <TextInput
-                label="MMO/L (Millimoles per Liter)"
-                keyboardType="numeric"
-                mode="outlined"
-                value={mgdcl}
-                onChangeText={setMgdcl}
-                style={styles.input}
-            />
-
-            <TextInput
                 label="Weight"
                 keyboardType="numeric"
                 mode="outlined"
@@ -110,14 +93,6 @@ export default function UserHealthRecords({ navigation }) {
                 style={styles.input}
             />
 
-            <View style={{ width: "100%", backgroundColor: "#fff" }}>
-                <RNPickerSelect
-                    placeholder={placeholder}
-                    items={options}
-                    onValueChange={(value) => setSelectedValue(value)}
-                    value={selectedValue}
-                />
-            </View>
             <Button mode="contained" buttonColor='#177AD5' onPress={handleSave} style={styles.button}>
                 Save
             </Button>

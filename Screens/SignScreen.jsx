@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, Button, Text, ActivityIndicator } from 'react-native-paper';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { collection, doc, setDoc } from 'firebase/firestore'; // Import Firestore modules
@@ -43,6 +43,7 @@ const SignUpScreen = ({ navigation }) => {
             })
         }).catch((error) => {
           console.error('Error updating user profile:', error.message);
+          Alert.alert('Sign up Error', error.message);
           setLoading(false);
 
         });
@@ -66,6 +67,7 @@ const SignUpScreen = ({ navigation }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error('Sign-up error:', errorMessage);
+        Alert.alert('Login Error', error.message);
         setLoading(false);
 
         // Handle specific errors or display error message to the user
