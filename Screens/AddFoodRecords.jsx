@@ -23,7 +23,7 @@ export default function AddFoodRecord() {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('https://8a91-41-75-180-124.ngrok-free.app/predict/', formData);
+            const response = await axios.post('https://5183-41-75-190-7.ngrok-free.app/predict/', formData);
             if (response.data.prediction == 1) {
                 Alert.alert('Classification', `The ${foodName} is good for a diabetic patient.`);
                 // Add the food record to Firestore
