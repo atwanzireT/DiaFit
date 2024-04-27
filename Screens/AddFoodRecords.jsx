@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Button, Alert, ScrollView } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import axios from 'axios';
 import { addDoc, collection } from 'firebase/firestore';
-import { firestoredb } from '../firebaseConfig';
+import { firestoredb, auth } from '../firebaseConfig';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function AddFoodRecord() {
     const [foodName, setFoodName] = useState("");
@@ -20,6 +21,17 @@ export default function AddFoodRecord() {
         Calcium_Content: '',
         Fiber_Content: '',
     });
+    const [currentUserEmail, setCurrentUserEmail] = useState(null);
+
+    const authEmails = ["tatwanzire@gmail.com", "allanklienz22@gmail.com", "omarajacob12@gmail.com"];
+
+    useEffect(() => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+            setCurrentUserEmail(user.email);
+        }
+    }, []);
 
     const handleSubmit = async () => {
         try {
@@ -56,6 +68,15 @@ export default function AddFoodRecord() {
             [name]: value,
         });
     };
+
+    if (!currentUserEmail || !authEmails.includes(currentUserEmail)) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.title}>Unauthorized Access</Text>
+                <Text>You are not authorized to access this feature.</Text>
+            </View>
+        );
+    }
 
     return (
         <ScrollView style={styles.container}>

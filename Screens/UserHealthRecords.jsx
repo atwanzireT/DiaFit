@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View, Alert } from 'react-native';
-import { Button, TextInput, Text } from 'react-native-paper';
-import RNPickerSelect from 'react-native-picker-select';
-import { collection, addDoc, setDoc, doc } from 'firebase/firestore';
-import { firebaseAuth, firestoredb } from '../firebaseConfig'; // Import Firebase Auth module and Firestore
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Alert } from 'react-native';
+import { Button, TextInput, ActivityIndicator } from 'react-native-paper';
+import { setDoc, doc } from 'firebase/firestore';
+import { firestoredb } from '../firebaseConfig'; // Import Firebase Auth module and Firestore
 import { StatusBar } from 'expo-status-bar';
 
 export default function UserHealthRecords({ navigation }) {
@@ -14,21 +12,15 @@ export default function UserHealthRecords({ navigation }) {
     const [hemoglobin, setHemoglobin] = useState('');
     const [bloodPressure, setBloodPressure] = useState('');
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const placeholder = {
         label: 'Select Diabetic type...',
         value: null,
     };
 
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user);
-        });
-        return () => unsubscribe();
-    }, []);
-
     const handleSave = async () => {
+        setLoading(true)
         try {
             if (user) {
                 const data = {
@@ -42,12 +34,15 @@ export default function UserHealthRecords({ navigation }) {
                 await setDoc(docRef, data);
 
                 console.log('Document written with ID: ', docRef.id);
+                setLoading(false);
                 Alert.alert('Success', 'Health records saved successfully.');
                 navigation.navigate("main");
             } else {
+                setLoading(false);
                 Alert.alert('Error', 'User not authenticated.');
             }
         } catch (error) {
+            setLoading(false);
             console.error('Error adding document: ', error);
             Alert.alert('Error', 'Failed to save health records. Please try again.');
         }
@@ -92,10 +87,14 @@ export default function UserHealthRecords({ navigation }) {
                 onChangeText={setBloodPressure}
                 style={styles.input}
             />
+            {loading ?
+                <ActivityIndicator color='#177AD5' size="small" />
+                :
+                <Button mode="contained" buttonColor='#177AD5' onPress={handleSave} style={styles.button}>
+                    Save
+                </Button>
+            }
 
-            <Button mode="contained" buttonColor='#177AD5' onPress={handleSave} style={styles.button}>
-                Save
-            </Button>
         </ScrollView>
     );
 }

@@ -12,9 +12,9 @@ export default function DashBoard({navigation}) {
     const [weight, setWeight] = useState("");
     const [bloodPressure, setBloodPressure] = useState("");
     const [millimoter, setMillimoter] = useState("");
-    const [glycated, setGlycated] = useState("");
     const [age, setAge] = useState("");
     const [user, setUser] = useState(null);
+    const [userDiet, setUserDiet] = useState([]);
 
     useEffect(() => {
         const auth = getAuth();
@@ -28,7 +28,6 @@ export default function DashBoard({navigation}) {
                         setWeight(data.weight || "");
                         setBloodPressure(data.bloodPressure || "");
                         setMillimoter(data.mgdcl || "");
-                        setGlycated(data.glycatedHemoglobin || "");
                         setAge(data.age || "");
                     } else {
                         console.log("No such document!");
@@ -76,10 +75,10 @@ export default function DashBoard({navigation}) {
                     <Text style={styles.title}>Nutrition Summary</Text>
                     <Bargraph />
                 </View>
-                <View>
+                {/* <View>
                     <Text style={styles.title}>Medication Schedule</Text>
                     <MedicalReminder />
-                </View>
+                </View> */}
             </View>
         </ScrollView>
     );

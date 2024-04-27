@@ -15,14 +15,16 @@ export default function RecommendationScreen() {
     const [data, setData] = useState([]);
     const [noItem, setNoItem] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [btnLoading, setBtnLoading] = useState(false);
 
     console.log("Value: ", glucose);
-    console.log("Data: ", data);
-    console.log("recommended Foods: ", recommendedFoods);
+    // console.log("Data: ", data);
+    // console.log("recommended Foods: ", recommendedFoods);
 
 
     const foodchoice = async (foodname, Glycemic_Index, Calcium_Content, Fat, Carbohydrates, Protein) => {
         console.log("Clicked!");
+        setBtnLoading(true)
         await setDoc(doc(firestoredb, "userDiet", user.uid), {
             user: user.uid,
             foodname: foodname,
@@ -32,6 +34,10 @@ export default function RecommendationScreen() {
             carbohydrates: Carbohydrates,
             protein: Protein
         }).then(() => {
+            setBtnLoading(false)
+            console.log("Item added!")
+        }).catch((err) => {
+            setBtnLoading(false)
             console.log("Item added!")
         })
     }
@@ -121,9 +127,11 @@ export default function RecommendationScreen() {
                                         <Text style={styles.valueText}>{item.Glycemic_Index} Glycemic Index</Text>
                                     </Card.Content>
                                     <Card.Actions style={styles.cardContent}>
-                                        <TouchableOpacity onPress={() => foodchoice(item.foodName, item.Glycemic_Index, item.Calcium_Content, item.Fat, item.Carbohydrates, item.Protein)}>
-                                            <Button mode="contained" buttonColor='#177AD5'>SELECT</Button>
-                                        </TouchableOpacity>
+                                        {btnLoading ? <ActivityIndicator color='#177AD5' size="small" /> :
+                                            <TouchableOpacity onPress={() => foodchoice(item.foodName, item.Glycemic_Index, item.Calcium_Content, item.Fat, item.Carbohydrates, item.Protein)}>
+                                                <Button mode="contained" buttonColor='#177AD5'>SELECT</Button>
+                                            </TouchableOpacity>
+                                        }
                                     </Card.Actions>
                                 </Card>
                             ))}
