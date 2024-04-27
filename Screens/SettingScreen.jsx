@@ -6,6 +6,18 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import customstyles from "../values/styles";
 
 export default function SettingScreen({navigation}) {
+
+    const handleLogout = async () => {
+        try {
+            await signOut(); // Call the signOut function from firebaseConfig
+            // Navigate to login screen or any other screen you prefer
+            navigation.navigate('Login'); // Change 'Login' to your desired screen name
+        } catch (error) {
+            console.error("Error logging out: ", error);
+            Alert.alert("Error", "An error occurred while logging out. Please try again.");
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -25,7 +37,7 @@ export default function SettingScreen({navigation}) {
                         <AntDesign name="right" size={24} color="black" />
                     </View>
                 </Card>
-                <Card style={[customstyles.mh_10, customstyles.mt_5]}>
+                <Card onPress={handleLogout} style={[customstyles.mh_10, customstyles.mt_5]}>
                     <View style={[customstyles.p_20, customstyles.grid, customstyles.space_between]}>
                         <Text>Logout</Text>
                         <FontAwesome5 name="power-off" size={24} color="#991b1b" />
